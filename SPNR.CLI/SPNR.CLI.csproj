@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ER.Shared.Container\ER.Shared.Container.csproj" />
+      <ProjectReference Include="..\ER.Shared.Services.Logging\ER.Shared.Services.Logging.csproj" />
+      <ProjectReference Include="..\SPNR.Core\SPNR.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="5.0.0" />
+      <PackageReference Include="System.CommandLine.DragonFruit" Version="0.3.0-alpha.20574.7" />
+    </ItemGroup>
+
+</Project>
