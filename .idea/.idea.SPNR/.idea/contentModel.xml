@@ -83,7 +83,6 @@
             </e>
             <e p="SelectionService.cs" t="Include" />
           </e>
-          <e p="Web" t="Include" />
         </e>
         <e p="SPNR.Core.csproj" t="IncludeRecursive" />
       </e>

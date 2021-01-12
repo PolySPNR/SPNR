@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ER.Shared.Services.Logging;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -25,19 +27,21 @@ namespace SPNR.Core.Services.Data
             _logger.Verbose("Service initialized");
         }
         
-        public void AddWork()
+        public async void AddWork(ScientificWork scientificWork)
         {
-            _dbContext.Add(new ScientificWork
-            {
-                AuthorName = "Kulev Egor"
-            });
-
-            _dbContext.SaveChanges();
+            await _dbContext.AddAsync(scientificWork);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public int WorkCount()
+        public async Task<int> WorkCount()
         {
-            return _dbContext.Works.Count();
+            return await _dbContext.Works.CountAsync();
+        }
+
+        // TODO: Rewrite for async operations
+        public async Task<ScientificWork> ListWorks(SearchInfo searchInfo)
+        {
+            return null;
         }
     }
 }
