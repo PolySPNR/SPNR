@@ -79,6 +79,7 @@
                 <e p="ELibraryDriver.cs" t="Include" />
               </e>
               <e p="ISelectionDriver.cs" t="Include" />
+              <e p="Scopus.cs" t="Include" />
               <e p="SelectionDriver.cs" t="Include" />
             </e>
             <e p="SelectionService.cs" t="Include" />

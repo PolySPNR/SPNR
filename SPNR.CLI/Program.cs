@@ -11,6 +11,8 @@ namespace SPNR.CLI
         {
             LoadEnvironment();
             
+            
+            
             var appContainer = new AppContainer<Startup, EntryPoint>();
             appContainer.Initialize();
             appContainer.Run();

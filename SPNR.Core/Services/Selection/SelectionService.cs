@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ER.Shared.Services.Logging;
 using Serilog;
+using SPNR.Core.Models;
 using SPNR.Core.Services.Selection.Drivers;
 
 namespace SPNR.Core.Services.Selection
@@ -43,6 +45,21 @@ namespace SPNR.Core.Services.Selection
                 _drivers.Add(name, (ISelectionDriver) Activator.CreateInstance(type));
                 _logger.Verbose($"Loaded driver for \"{name}\"");
             }
+        }
+
+        public async Task<List<ScientificWork>> Search(SearchInfo searchInfo)
+        {
+            var works = new List<ScientificWork>();
+            
+            _logger.Verbose("Start searching for works");
+            
+            foreach (var (driverId, driver) in _drivers)
+            {
+                _logger.Verbose($"Searching at: \"{driverId}\"");
+                works.AddRange(await driver.Search(searchInfo));
+            }
+
+            return works;
         }
     }
 }
