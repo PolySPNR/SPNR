@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\thewg\AppData\Local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\thewg\AppData\Local\JetBrains\Rider2020.1\resharper-host\Local\Transient\ReSharperHost\v201\SolutionCaches\_SPNR.912261316.00" t="ExcludeRecursive" />
+    <e p="C:\Users\thewg\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\thewg\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_SPNR.912261316.00" t="ExcludeRecursive" />
+    <e p="C:\Users\thewg\AppData\Roaming\JetBrains\Rider2020.3\consoles\db" t="IncludeRecursive" />
     <e p="C:\Users\thewg\repo\wgos\SPNR" t="IncludeFlat">
       <e p="ER.Shared.Container" t="IncludeRecursive">
         <e p="AppContainer.cs" t="Include" />
@@ -12,7 +13,7 @@
         <e p="IContainerStartup.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
+            <e p="net5.0" t="Include">
               <e p="ER.Shared.Container.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -26,7 +27,7 @@
         <e p="LoggerFactory.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
+            <e p="net5.0" t="Include">
               <e p="ER.Shared.Services.Logging.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -39,7 +40,7 @@
         <e p="EntryPoint.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
+            <e p="net5.0" t="Include">
               <e p="SPNR.CLI.AssemblyInfo.cs" t="Include" />
               <e p="SPNR.CLI.Program.g.cs" t="Include" />
             </e>
@@ -50,17 +51,44 @@
         <e p="Startup.cs" t="Include" />
       </e>
       <e p="SPNR.Core" t="IncludeRecursive">
+        <e p="Api" t="Include">
+          <e p="ELibrary" t="Include">
+            <e p="Credentials" t="Include">
+              <e p="ELibCredentialsType.cs" t="Include" />
+            </e>
+            <e p="ELibApi.cs" t="Include" />
+          </e>
+        </e>
         <e p="bin" t="ExcludeRecursive" />
+        <e p="Migrations" t="Include" />
         <e p="Misc" t="Include">
           <e p="EnvVar.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
-          <e p="ScientificWork.cs" t="Include" />
+          <e p="ApiAnswer.cs" t="Include" />
+          <e p="AuthorInfo" t="Include">
+            <e p="Author.cs" t="Include" />
+            <e p="Department.cs" t="Include" />
+            <e p="Faculty.cs" t="Include" />
+            <e p="Organization.cs" t="Include" />
+            <e p="Position.cs" t="Include" />
+          </e>
           <e p="SearchInfo.cs" t="Include" />
+          <e p="Works" t="Include">
+            <e p="Fields" t="Include">
+              <e p="ELibInfo.cs" t="Include" />
+            </e>
+            <e p="PublishData" t="Include">
+              <e p="DepPublish.cs" t="Include" />
+              <e p="JournalPublish.cs" t="Include" />
+              <e p="PublishType.cs" t="Include" />
+            </e>
+            <e p="ScientificWork.cs" t="Include" />
+          </e>
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
+            <e p="net5.0" t="Include">
               <e p="SPNR.Core.AssemblyInfo.cs" t="Include" />
             </e>
           </e>

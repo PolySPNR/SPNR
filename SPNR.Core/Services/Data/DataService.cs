@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ER.Shared.Services.Logging;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SPNR.Core.Models;
+using SPNR.Core.Models.AuthorInfo;
+using SPNR.Core.Models.Works;
 using SPNR.Core.Services.Data.Contexts;
 
 namespace SPNR.Core.Services.Data
@@ -26,7 +29,12 @@ namespace SPNR.Core.Services.Data
             _dbContext.Database.Migrate();
             _logger.Verbose("Service initialized");
         }
-        
+
+        public async Task<List<Organization>> GetOrganizations()
+        {
+            return await _dbContext.Organizations.ToListAsync();
+        }
+
         public async void AddWork(ScientificWork scientificWork)
         {
             await _dbContext.AddAsync(scientificWork);

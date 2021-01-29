@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ER.Shared.Services.Logging;
 using Serilog;
 using SPNR.Core.Models;
+using SPNR.Core.Models.Works;
 using SPNR.Core.Services.Selection.Drivers;
 
 namespace SPNR.Core.Services.Selection
