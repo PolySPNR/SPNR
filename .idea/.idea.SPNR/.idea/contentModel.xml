@@ -60,7 +60,11 @@
           </e>
         </e>
         <e p="bin" t="ExcludeRecursive" />
-        <e p="Migrations" t="Include" />
+        <e p="Migrations" t="Include">
+          <e p="20210129085145_InitCreate.cs" t="Include" />
+          <e p="20210129085145_InitCreate.Designer.cs" t="Include" />
+          <e p="ScWorkContextModelSnapshot.cs" t="Include" />
+        </e>
         <e p="Misc" t="Include">
           <e p="EnvVar.cs" t="Include" />
         </e>

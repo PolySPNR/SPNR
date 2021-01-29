@@ -218,7 +218,6 @@ namespace SPNR.Core.Api.ELibrary
                         answer.Data.JournalPublish.EndPage = pages[1];
                         break;
                 }
-
             }
             
             return answer;
