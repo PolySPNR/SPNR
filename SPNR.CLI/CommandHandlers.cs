@@ -9,5 +9,10 @@ namespace SPNR.CLI
         {
             await _dataService.ImportAuthorsFromFile(file.FullName);
         }
+
+        private async Task ListAuthorsHandler(string org, string fac, string dep)
+        {
+            _logger.Warning($"{org} : {fac} : {dep}");
+        }
     }
 }

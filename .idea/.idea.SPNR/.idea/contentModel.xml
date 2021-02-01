@@ -65,6 +65,8 @@
         <e p="Migrations" t="Include">
           <e p="20210201145828_InitCreate.cs" t="Include" />
           <e p="20210201145828_InitCreate.Designer.cs" t="Include" />
+          <e p="20210201194434_ChangePublicationData.cs" t="Include" />
+          <e p="20210201194434_ChangePublicationData.Designer.cs" t="Include" />
           <e p="ScWorkContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Misc" t="Include">

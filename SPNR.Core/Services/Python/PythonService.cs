@@ -24,11 +24,16 @@ namespace SPNR.Core.Services.Python
 
             if (!File.Exists("./python/win/Scripts/pip.exe")) SetUp();
 
-            using var pipList = new Process();
-            pipList.StartInfo.FileName = "./python/win/Scripts/pip.exe";
-            pipList.StartInfo.Arguments = "list";
-            pipList.StartInfo.RedirectStandardOutput = true;
-            pipList.StartInfo.UseShellExecute = false;
+            using var pipList = new Process
+            {
+                StartInfo =
+                {
+                    FileName = "./python/win/Scripts/pip.exe",
+                    Arguments = "list",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false
+                }
+            };
             pipList.Start();
 
             var output = pipList.StandardOutput.ReadToEnd();
@@ -84,7 +89,7 @@ namespace SPNR.Core.Services.Python
 
         public string Exec(string script, string arguments)
         {
-            using var pipList = new Process
+            using var scriptProcess = new Process
             {
                 StartInfo =
                 {
@@ -94,9 +99,9 @@ namespace SPNR.Core.Services.Python
                     UseShellExecute = false
                 }
             };
-            pipList.Start();
+            scriptProcess.Start();
 
-            return pipList.StandardOutput.ReadToEnd();
+            return scriptProcess.StandardOutput.ReadToEnd();
         }
     }
 }

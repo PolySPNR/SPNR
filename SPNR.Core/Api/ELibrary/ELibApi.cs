@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using Newtonsoft.Json;
 using SPNR.Core.Api.ELibrary.Credentials;
 using SPNR.Core.Models;
 using SPNR.Core.Models.Works;
+using SPNR.Core.Models.Works.Fields;
 using SPNR.Core.Models.Works.PublishData;
 
 namespace SPNR.Core.Api.ELibrary
 {
     public class ELibApi
     {
-        private readonly Uri _baseAddress = new("https://www.elibrary.ru");
+        private Uri _baseAddress = new("https://elibrary.ru/");
         private readonly HttpClient _httpClient;
         private readonly HtmlParser _parser = new();
 
@@ -31,7 +35,7 @@ namespace SPNR.Core.Api.ELibrary
 
             _httpClient = new HttpClient(httpClientHandler)
             {
-                BaseAddress = _baseAddress
+                //BaseAddress = _baseAddress
             };
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
@@ -53,37 +57,51 @@ namespace SPNR.Core.Api.ELibrary
 
         public async Task<ApiAnswer> Authorize(ELibCredentialsType credentialsType, string cred1, string cred2)
         {
-            if (!CheckCooldown())
-                return new ApiAnswer
-                {
-                    Exception = new Exception("You can't do request yet")
-                };
+            // if (!CheckCooldown())
+            //     return new ApiAnswer
+            //     {
+            //         Exception = new Exception("You can't do request yet")
+            //     };
 
-            if (credentialsType == ELibCredentialsType.Cookies)
+            // if (credentialsType == ELibCredentialsType.Cookies)
+            // {
+            //     CookieContainer.Add(_baseAddress, new CookieCollection
+            //     {
+            //         new Cookie("SUserID", cred1),
+            //         new Cookie("SCookieID", cred2)
+            //     });
+            //
+            //     // TODO check if cookies are still valid
+            //
+            //     return new ApiAnswer();
+            // }
+
+            try
             {
-                CookieContainer.Add(_baseAddress, new CookieCollection
+                var initReq = await _httpClient.GetAsync(_baseAddress);
+                initReq.EnsureSuccessStatusCode();
+                _baseAddress = new Uri(initReq.RequestMessage?.RequestUri.GetLeftPart(UriPartial.Authority));
+                
+                Console.WriteLine(_baseAddress);
+                
+
+                var authContent = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
-                    new Cookie("SUserID", cred1),
-                    new Cookie("SCookieID", cred2)
+                    {"login", cred1},
+                    {"password", cred2}
                 });
 
-                // TODO check if cookies are still valid
+                await _httpClient.PostAsync(_baseAddress + "start_session.asp", authContent);
+
+                foreach (Cookie cookie in CookieContainer.GetCookies(_baseAddress))
+                    Console.WriteLine(cookie.ToString());
 
                 return new ApiAnswer();
             }
-
-            await _httpClient.GetAsync("/");
-
-            var authContent = new FormUrlEncodedContent(new Dictionary<string, string>
+            catch (Exception e)
             {
-                {"login", cred1},
-                {"password", cred2}
-            });
-
-            await _httpClient.PostAsync("/start_session.asp", authContent);
-
-            foreach (Cookie cookie in CookieContainer.GetCookies(new Uri("https://www.elibrary.ru")))
-                Console.WriteLine(cookie.ToString());
+                Console.WriteLine(e);
+            }
 
             return new ApiAnswer();
         }
@@ -137,12 +155,10 @@ namespace SPNR.Core.Api.ELibrary
             if (searchInfo.DateTo != default) sData["end_year"] = searchInfo.DateTo.Year.ToString();
 
             var content = new FormUrlEncodedContent(sData);
-            var response = await _httpClient.PostAsync($"/query_results.asp?pagenum={pageId}", content);
+            var response = await _httpClient.PostAsync(_baseAddress + $"query_results.asp?pagenum={pageId}", content);
             answer.StatusCode = response.StatusCode;
 
             var doc = _parser.ParseDocument(await response.Content.ReadAsStringAsync());
-
-            Console.WriteLine(doc.Body.InnerHtml);
 
             var table = doc.QuerySelectorAll("#restab > tbody")[0].Children;
 
@@ -163,60 +179,84 @@ namespace SPNR.Core.Api.ELibrary
         {
             var answer = new ApiAnswer<ScientificWork>
             {
-                Data = new ScientificWork()
+                Data = new ScientificWork
+                {
+                    PublicationInfo = new Dictionary<string, string>(),
+                    PublicationMeta = new Dictionary<string, List<string>>()
+                }
             };
 
-            var response = await _httpClient.GetAsync($"/item.asp?id={id}");
-            var doc = _parser.ParseDocument(await response.Content.ReadAsStringAsync());
-
+            var response = await _httpClient.GetAsync(_baseAddress + $"item.asp?id={id}");
+            var doc = await _parser.ParseDocumentAsync(await response.Content.ReadAsStringAsync());
+            
             var publishInfo =
                 doc.QuerySelector(
                     "body > table > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(1)");
-
+            
             answer.Data.WorkName = publishInfo.QuerySelector(
                     "table:nth-child(2) > tbody > tr > td:nth-child(2) > span > b > p")
                 .InnerHtml;
 
-            if (publishInfo.QuerySelector(
-                    "div > table:nth-child(4) > tbody > tr:nth-child(1) > td > font:nth-child(1)")
-                .InnerHtml.Contains("журн")
-            )
+            // Add Publication Info
+            var regex = new Regex(@"\>(.*?)\<");
+            var pubInfoData = regex.Matches(publishInfo
+                    .QuerySelector("div > table:nth-child(4) > tbody").InnerHtml
+                    .Replace("\n", "")
+                    .Replace("&nbsp;", " "))
+                .Where(m => m.Groups.Values.All(g => !string.IsNullOrEmpty(g.Value.Trim())))
+                .Select(m => m.Groups[1])
+                .Select(g => g.Value).ToList();
+            
+            for (var i = 0; i < pubInfoData.Count; i += 2)
             {
-                answer.Data.PublishType = PublishType.Journal;
-                answer.Data.JournalPublish = new JournalPublish
-                {
-                    Name = publishInfo
-                        .QuerySelector("div > table:nth-child(6) > tbody > tr:nth-child(2) > td:nth-child(2) > a")
-                        .InnerHtml,
-                    Number = publishInfo.QuerySelector("div > table:nth-child(4) > tbody > tr:nth-child(3) > td > a")
-                        .InnerHtml,
-                    Year = int.Parse(publishInfo
-                        .QuerySelector("div > table:nth-child(4) > tbody > tr:nth-child(3) > td > font").InnerHtml),
-                    ISSN = publishInfo
-                        .QuerySelector("div > table:nth-child(6) > tbody > tr:nth-child(2) > td:nth-child(2) > font")
-                        .InnerHtml
-                };
-
-                var pages =
-                    (from pageStr in publishInfo
-                            .QuerySelector("div > table:nth-child(4) > tbody > tr:nth-child(3) > td > div > font")
-                            .InnerHtml
-                            .Split('-')
-                        select int.Parse(pageStr)).ToList();
-
-                switch (pages.Count)
-                {
-                    case < 2:
-                        answer.Data.JournalPublish.StartPage = pages[0];
-                        answer.Data.JournalPublish.EndPage = pages[0];
-                        break;
-                    case >= 2:
-                        answer.Data.JournalPublish.StartPage = pages[0];
-                        answer.Data.JournalPublish.EndPage = pages[1];
-                        break;
-                }
+                answer.Data.PublicationInfo.TryAdd(pubInfoData[i].Replace(": ", "").Trim(), pubInfoData[i + 1].Trim());
             }
 
+            // Add Publication Meta
+            var pubTables = publishInfo.QuerySelectorAll("div > table").ToList().Skip(2).ToList();
+
+            for (var i = 0;
+                !(pubTables[i].QuerySelector("tbody > tr:nth-child(1) > td > font").InnerHtml.ToLower().Contains("аннотация") ||
+                  pubTables[i].QuerySelector("tbody > tr:nth-child(1) > td > font").InnerHtml.ToLower().Contains("ключевые слова"));
+                i++)
+            {
+                var key = pubTables[i].QuerySelector("tbody > tr:nth-child(1) > td > font").InnerHtml.Replace(":", "");
+
+                var metaArray = new Regex("<[^>]*>").Replace(
+                    pubTables[i].QuerySelector("tbody > tr:nth-child(2) > td:nth-child(2)").InnerHtml
+                        .Replace("\n", "")
+                        .Replace("&nbsp;", " ")
+                        .Replace("<br>", "\n"), "")
+                    .Trim()
+                    .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+                answer.Data.PublicationMeta.TryAdd(key, metaArray.ToList());
+            }
+            
+            // Add ELib fields
+            var metricsElement = pubTables.Where(t => t.QuerySelector("tbody > tr:nth-child(1) > td > font") != null)
+                .FirstOrDefault(t => t.QuerySelector("tbody > tr:nth-child(1) > td > font").InnerHtml.Contains("БИБЛИОМЕТРИЧЕСКИЕ"));
+            
+            if(metricsElement == null)
+                return answer;
+            
+            var metrics = metricsElement.QuerySelector("tbody > tr:nth-child(2) > td:nth-child(2) > table:nth-child(2) > tbody")
+                .Text()
+                .Trim()
+                .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+                .Select(s => s.Trim().Replace("\u00ae", ""))
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToDictionary(k => k.Split(":")[0], v => v.Split(":")[1].Trim());
+            
+            answer.Data.ELibInfo = new ELibInfo
+            {
+                RINC = metrics["Входит в РИНЦ"] == "да",
+                RINCCore = metrics["Входит в ядро РИНЦ"] == "да",
+                Scopus = metrics["Входит в Scopus"] == "да",
+                WebOfScience = metrics["Входит в Web of Science"] == "да",
+                RawMetrics = metrics
+            };
+            
             return answer;
         }
     }

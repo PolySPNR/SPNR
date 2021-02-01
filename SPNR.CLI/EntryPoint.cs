@@ -14,7 +14,6 @@ namespace SPNR.CLI
         private readonly ILogger _logger;
         private readonly PythonService _pythonService;
         private readonly SelectionService _selectionService;
-        private readonly ScWorkContext _workContext;
 
         public EntryPoint(ILoggerFactory loggerFactory, DataService dataService, SelectionService selectionService,
             PythonService pythonService)

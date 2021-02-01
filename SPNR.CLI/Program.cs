@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using ER.Shared.Container;
+using Newtonsoft.Json;
+using SPNR.Core.Api.ELibrary;
+using SPNR.Core.Api.ELibrary.Credentials;
+using SPNR.Core.Models;
 
 namespace SPNR.CLI
 {
@@ -13,7 +18,7 @@ namespace SPNR.CLI
             Arguments = args;
 
             LoadEnvironment();
-
+            
             var appContainer = new AppContainer<Startup, EntryPoint>();
             appContainer.Initialize();
             appContainer.Run();
