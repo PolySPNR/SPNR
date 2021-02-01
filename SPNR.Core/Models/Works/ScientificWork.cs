@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using SPNR.Core.Models.AuthorInfo;
 using SPNR.Core.Models.Works.Fields;
 using SPNR.Core.Models.Works.PublishData;

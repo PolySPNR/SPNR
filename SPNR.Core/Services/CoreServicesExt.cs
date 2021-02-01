@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SPNR.Core.Services.Data;
 using SPNR.Core.Services.Data.Contexts;
+using SPNR.Core.Services.Python;
 using SPNR.Core.Services.Selection;
 
 namespace SPNR.Core.Services
@@ -13,6 +14,7 @@ namespace SPNR.Core.Services
             collection.AddDbContext<ScWorkContext>();
             collection.AddSingleton<DataService>();
             collection.AddSingleton<SelectionService>();
+            collection.AddSingleton<PythonService>();
             
             return collection;
         }

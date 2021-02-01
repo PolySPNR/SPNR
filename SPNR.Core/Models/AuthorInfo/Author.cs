@@ -18,6 +18,12 @@ namespace SPNR.Core.Models.AuthorInfo
         
         // org > fac > dep > author
         
+        public int OrganizationId { get; set; }
+        public Organization Organization { get; set; }
+        
+        public int FacultyId { get; set; }
+        public Faculty Faculty { get; set; }
+        
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
         

@@ -61,12 +61,12 @@ namespace SPNR.Core.Services.Data.Contexts
                     new()
                     {
                         PositionId = 1,
-                        Name = "Доцент"
+                        Name = "доцент"
                     },
                     new()
                     {
                         PositionId = 2,
-                        Name = "Студент"
+                        Name = "студент"
                     }
                 });
         }

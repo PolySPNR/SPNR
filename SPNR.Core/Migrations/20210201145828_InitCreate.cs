@@ -146,6 +146,8 @@ namespace SPNR.Core.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     NameEnglish = table.Column<string>(type: "TEXT", nullable: true),
                     Hourly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    OrganizationId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FacultyId = table.Column<int>(type: "INTEGER", nullable: false),
                     DepartmentId = table.Column<int>(type: "INTEGER", nullable: false),
                     PositionId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -157,6 +159,18 @@ namespace SPNR.Core.Migrations
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "DepartmentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Authors_Faculties_FacultyId",
+                        column: x => x.FacultyId,
+                        principalTable: "Faculties",
+                        principalColumn: "FacultyId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Authors_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "OrganizationId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Authors_Positions_PositionId",
@@ -198,12 +212,12 @@ namespace SPNR.Core.Migrations
             migrationBuilder.InsertData(
                 table: "Positions",
                 columns: new[] { "PositionId", "Name" },
-                values: new object[] { 1, "Доцент" });
+                values: new object[] { 1, "доцент" });
 
             migrationBuilder.InsertData(
                 table: "Positions",
                 columns: new[] { "PositionId", "Name" },
-                values: new object[] { 2, "Студент" });
+                values: new object[] { 2, "студент" });
 
             migrationBuilder.InsertData(
                 table: "Faculties",
@@ -219,6 +233,16 @@ namespace SPNR.Core.Migrations
                 name: "IX_Authors_DepartmentId",
                 table: "Authors",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Authors_FacultyId",
+                table: "Authors",
+                column: "FacultyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Authors_OrganizationId",
+                table: "Authors",
+                column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Authors_PositionId",

@@ -9,7 +9,7 @@ using SPNR.Core.Services.Data.Contexts;
 namespace SPNR.Core.Migrations
 {
     [DbContext(typeof(ScWorkContext))]
-    [Migration("20210129085145_InitCreate")]
+    [Migration("20210201145828_InitCreate")]
     partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace SPNR.Core.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("Hourly")
                         .HasColumnType("INTEGER");
 
@@ -52,12 +55,19 @@ namespace SPNR.Core.Migrations
                     b.Property<string>("NameEnglish")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PositionId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("AuthorId");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("FacultyId");
+
+                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("PositionId");
 
@@ -169,12 +179,12 @@ namespace SPNR.Core.Migrations
                         new
                         {
                             PositionId = 1,
-                            Name = "Доцент"
+                            Name = "доцент"
                         },
                         new
                         {
                             PositionId = 2,
-                            Name = "Студент"
+                            Name = "студент"
                         });
                 });
 
@@ -288,6 +298,18 @@ namespace SPNR.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SPNR.Core.Models.AuthorInfo.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SPNR.Core.Models.AuthorInfo.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SPNR.Core.Models.AuthorInfo.Position", "Position")
                         .WithMany()
                         .HasForeignKey("PositionId")
@@ -295,6 +317,10 @@ namespace SPNR.Core.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
+
+                    b.Navigation("Faculty");
+
+                    b.Navigation("Organization");
 
                     b.Navigation("Position");
                 });
