@@ -12,7 +12,7 @@ namespace SPNR.CLI
             {
                 BuildImportCommand()
             };
-            
+
             rootCmd.InvokeAsync(Program.Arguments).Wait();
         }
 
@@ -24,7 +24,7 @@ namespace SPNR.CLI
             };
 
             impAuthorsCmd.Handler = CommandHandler.Create<FileInfo>(ImportAuthorsHandler);
-            
+
             var cmd = new Command("import", "Data import base command")
             {
                 impAuthorsCmd

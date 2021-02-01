@@ -7,7 +7,7 @@ namespace SPNR.Core.Models.AuthorInfo
     public class Position
     {
         public int PositionId { get; set; }
-        [Required]
-        public string Name { get; set; }
+
+        [Required] public string Name { get; set; }
     }
 }

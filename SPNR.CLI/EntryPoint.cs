@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.Linq;
-using ER.Shared.Container;
+﻿using ER.Shared.Container;
 using ER.Shared.Services.Logging;
 using Serilog;
-using SPNR.Core.Models;
-using SPNR.Core.Models.AuthorInfo;
-using SPNR.Core.Models.Works;
 using SPNR.Core.Services.Data;
 using SPNR.Core.Services.Data.Contexts;
 using SPNR.Core.Services.Python;
@@ -18,12 +11,13 @@ namespace SPNR.CLI
     public partial class EntryPoint : IContainerEntryPoint
     {
         private readonly DataService _dataService;
-        private readonly SelectionService _selectionService;
-        private readonly PythonService _pythonService;
-        private readonly ScWorkContext _workContext;
         private readonly ILogger _logger;
+        private readonly PythonService _pythonService;
+        private readonly SelectionService _selectionService;
+        private readonly ScWorkContext _workContext;
 
-        public EntryPoint(ILoggerFactory loggerFactory, DataService dataService, SelectionService selectionService, PythonService pythonService)
+        public EntryPoint(ILoggerFactory loggerFactory, DataService dataService, SelectionService selectionService,
+            PythonService pythonService)
         {
             _logger = loggerFactory.GetLogger("CLI");
             _dataService = dataService;
@@ -36,7 +30,7 @@ namespace SPNR.CLI
             _logger.Information("SPNR / SWSS (Scientific Works Search System)");
             _dataService.Initialize();
             _selectionService.Initialize();
-            
+
             _pythonService.Initialize();
 
             BuildCommands();

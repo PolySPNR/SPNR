@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using SPNR.Core.Misc;
-using SPNR.Core.Models;
 using SPNR.Core.Models.AuthorInfo;
 using SPNR.Core.Models.Works;
 using SPNR.Core.Models.Works.Fields;
@@ -28,33 +27,33 @@ namespace SPNR.Core.Services.Data.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var department = new Department()
+            var department = new Department
             {
                 DepartmentId = 1,
                 FacultyId = 1,
                 Name = "Кафедра Информационной Безопасности"
             };
-            
-            var faculty = new Faculty()
+
+            var faculty = new Faculty
             {
                 FacultyId = 1,
                 OrganizationId = 1,
                 Name = "Факультет Информационных Технологий"
             };
-        
+
             modelBuilder.Entity<Department>()
                 .HasData(department);
-            
+
             modelBuilder.Entity<Faculty>()
                 .HasData(faculty);
-            
+
             modelBuilder.Entity<Organization>()
                 .HasData(new Organization
                 {
                     OrganizationId = 1,
                     Name = "Московский Политехнический Университет"
                 });
-        
+
             modelBuilder.Entity<Position>()
                 .HasData(new List<Position>
                 {

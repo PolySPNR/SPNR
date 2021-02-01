@@ -9,7 +9,7 @@ namespace SPNR.Core.Models
         public HttpStatusCode StatusCode { get; set; }
         public Exception Exception { get; set; }
     }
-    
+
     public class ApiAnswer
     {
         public HttpStatusCode StatusCode { get; set; }

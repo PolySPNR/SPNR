@@ -23,10 +23,11 @@ namespace ER.Shared.Services.Logging
                 .Console(outputTemplate: format);
 
             if (fileLog)
-                logger.WriteTo.File($"logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss}/erx.log", outputTemplate: format, shared: true, rollOnFileSizeLimit: true);
-                
+                logger.WriteTo.File($"logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss}/erx.log", outputTemplate: format,
+                    shared: true, rollOnFileSizeLimit: true);
+
             var l = logger.CreateLogger();
-            
+
             return l;
         }
     }

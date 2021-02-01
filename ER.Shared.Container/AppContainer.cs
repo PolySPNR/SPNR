@@ -8,7 +8,7 @@ namespace ER.Shared.Container
         where TContainerEntryPoint : class, IContainerEntryPoint
     {
         private IServiceProvider _serviceProvider;
-        
+
         public void Initialize()
         {
             var container = new ServiceCollection();
@@ -20,7 +20,7 @@ namespace ER.Shared.Container
             _serviceProvider = container.BuildServiceProvider();
             startupInstance.ConfigureServices(_serviceProvider);
         }
-        
+
         public void Run()
         {
             var entryPoint = _serviceProvider.GetService<IContainerEntryPoint>();

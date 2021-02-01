@@ -8,321 +8,313 @@ namespace SPNR.Core.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Organizations",
-                columns: table => new
+                "Organizations",
+                table => new
                 {
-                    OrganizationId = table.Column<int>(type: "INTEGER", nullable: false)
+                    OrganizationId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>("TEXT", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Organizations", x => x.OrganizationId);
-                });
+                constraints: table => { table.PrimaryKey("PK_Organizations", x => x.OrganizationId); });
 
             migrationBuilder.CreateTable(
-                name: "Positions",
-                columns: table => new
+                "Positions",
+                table => new
                 {
-                    PositionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    PositionId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>("TEXT", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Positions", x => x.PositionId);
-                });
+                constraints: table => { table.PrimaryKey("PK_Positions", x => x.PositionId); });
 
             migrationBuilder.CreateTable(
-                name: "Works",
-                columns: table => new
+                "Works",
+                table => new
                 {
-                    ScientificWorkId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ScientificWorkId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    WorkName = table.Column<string>(type: "TEXT", nullable: true),
-                    PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PublishType = table.Column<int>(type: "INTEGER", nullable: false),
-                    DigitalObjectIdentifier = table.Column<string>(type: "TEXT", nullable: true)
+                    WorkName = table.Column<string>("TEXT", nullable: true),
+                    PublicationDate = table.Column<DateTime>("TEXT", nullable: false),
+                    PublishType = table.Column<int>("INTEGER", nullable: false),
+                    DigitalObjectIdentifier = table.Column<string>("TEXT", nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Works", x => x.ScientificWorkId);
-                });
+                constraints: table => { table.PrimaryKey("PK_Works", x => x.ScientificWorkId); });
 
             migrationBuilder.CreateTable(
-                name: "Faculties",
-                columns: table => new
+                "Faculties",
+                table => new
                 {
-                    FacultyId = table.Column<int>(type: "INTEGER", nullable: false)
+                    FacultyId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    OrganizationId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Name = table.Column<string>("TEXT", nullable: false),
+                    OrganizationId = table.Column<int>("INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Faculties", x => x.FacultyId);
                     table.ForeignKey(
-                        name: "FK_Faculties_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrganizationId",
+                        "FK_Faculties_Organizations_OrganizationId",
+                        x => x.OrganizationId,
+                        "Organizations",
+                        "OrganizationId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ELibFields",
-                columns: table => new
+                "ELibFields",
+                table => new
                 {
-                    ELibInfoId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ELibInfoId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    RINC = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RINCCore = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Scopus = table.Column<bool>(type: "INTEGER", nullable: false),
-                    WebOfScience = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ScientificWorkId = table.Column<int>(type: "INTEGER", nullable: false)
+                    RINC = table.Column<bool>("INTEGER", nullable: false),
+                    RINCCore = table.Column<bool>("INTEGER", nullable: false),
+                    Scopus = table.Column<bool>("INTEGER", nullable: false),
+                    WebOfScience = table.Column<bool>("INTEGER", nullable: false),
+                    ScientificWorkId = table.Column<int>("INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ELibFields", x => x.ELibInfoId);
                     table.ForeignKey(
-                        name: "FK_ELibFields_Works_ScientificWorkId",
-                        column: x => x.ScientificWorkId,
-                        principalTable: "Works",
-                        principalColumn: "ScientificWorkId",
+                        "FK_ELibFields_Works_ScientificWorkId",
+                        x => x.ScientificWorkId,
+                        "Works",
+                        "ScientificWorkId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "JournalPublishes",
-                columns: table => new
+                "JournalPublishes",
+                table => new
                 {
-                    JournalPublishId = table.Column<int>(type: "INTEGER", nullable: false)
+                    JournalPublishId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    ISSN = table.Column<string>(type: "TEXT", nullable: true),
-                    Number = table.Column<string>(type: "TEXT", nullable: true),
-                    Year = table.Column<int>(type: "INTEGER", nullable: false),
-                    StartPage = table.Column<int>(type: "INTEGER", nullable: false),
-                    EndPage = table.Column<int>(type: "INTEGER", nullable: false),
-                    ScientificWorkId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Name = table.Column<string>("TEXT", nullable: true),
+                    ISSN = table.Column<string>("TEXT", nullable: true),
+                    Number = table.Column<string>("TEXT", nullable: true),
+                    Year = table.Column<int>("INTEGER", nullable: false),
+                    StartPage = table.Column<int>("INTEGER", nullable: false),
+                    EndPage = table.Column<int>("INTEGER", nullable: false),
+                    ScientificWorkId = table.Column<int>("INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_JournalPublishes", x => x.JournalPublishId);
                     table.ForeignKey(
-                        name: "FK_JournalPublishes_Works_ScientificWorkId",
-                        column: x => x.ScientificWorkId,
-                        principalTable: "Works",
-                        principalColumn: "ScientificWorkId",
+                        "FK_JournalPublishes_Works_ScientificWorkId",
+                        x => x.ScientificWorkId,
+                        "Works",
+                        "ScientificWorkId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
+                "Departments",
+                table => new
                 {
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DepartmentId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    FacultyId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Name = table.Column<string>("TEXT", nullable: false),
+                    FacultyId = table.Column<int>("INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.DepartmentId);
                     table.ForeignKey(
-                        name: "FK_Departments_Faculties_FacultyId",
-                        column: x => x.FacultyId,
-                        principalTable: "Faculties",
-                        principalColumn: "FacultyId",
+                        "FK_Departments_Faculties_FacultyId",
+                        x => x.FacultyId,
+                        "Faculties",
+                        "FacultyId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Authors",
-                columns: table => new
+                "Authors",
+                table => new
                 {
-                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AuthorId = table.Column<int>("INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    NameEnglish = table.Column<string>(type: "TEXT", nullable: true),
-                    Hourly = table.Column<bool>(type: "INTEGER", nullable: false),
-                    OrganizationId = table.Column<int>(type: "INTEGER", nullable: false),
-                    FacultyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PositionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Name = table.Column<string>("TEXT", nullable: false),
+                    NameEnglish = table.Column<string>("TEXT", nullable: true),
+                    Hourly = table.Column<bool>("INTEGER", nullable: false),
+                    OrganizationId = table.Column<int>("INTEGER", nullable: false),
+                    FacultyId = table.Column<int>("INTEGER", nullable: false),
+                    DepartmentId = table.Column<int>("INTEGER", nullable: false),
+                    PositionId = table.Column<int>("INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Authors", x => x.AuthorId);
                     table.ForeignKey(
-                        name: "FK_Authors_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentId",
+                        "FK_Authors_Departments_DepartmentId",
+                        x => x.DepartmentId,
+                        "Departments",
+                        "DepartmentId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Authors_Faculties_FacultyId",
-                        column: x => x.FacultyId,
-                        principalTable: "Faculties",
-                        principalColumn: "FacultyId",
+                        "FK_Authors_Faculties_FacultyId",
+                        x => x.FacultyId,
+                        "Faculties",
+                        "FacultyId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Authors_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrganizationId",
+                        "FK_Authors_Organizations_OrganizationId",
+                        x => x.OrganizationId,
+                        "Organizations",
+                        "OrganizationId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Authors_Positions_PositionId",
-                        column: x => x.PositionId,
-                        principalTable: "Positions",
-                        principalColumn: "PositionId",
+                        "FK_Authors_Positions_PositionId",
+                        x => x.PositionId,
+                        "Positions",
+                        "PositionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AuthorScientificWork",
-                columns: table => new
+                "AuthorScientificWork",
+                table => new
                 {
-                    AuthorsAuthorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ScientificWorksScientificWorkId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AuthorsAuthorId = table.Column<int>("INTEGER", nullable: false),
+                    ScientificWorksScientificWorkId = table.Column<int>("INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthorScientificWork", x => new { x.AuthorsAuthorId, x.ScientificWorksScientificWorkId });
+                    table.PrimaryKey("PK_AuthorScientificWork",
+                        x => new {x.AuthorsAuthorId, x.ScientificWorksScientificWorkId});
                     table.ForeignKey(
-                        name: "FK_AuthorScientificWork_Authors_AuthorsAuthorId",
-                        column: x => x.AuthorsAuthorId,
-                        principalTable: "Authors",
-                        principalColumn: "AuthorId",
+                        "FK_AuthorScientificWork_Authors_AuthorsAuthorId",
+                        x => x.AuthorsAuthorId,
+                        "Authors",
+                        "AuthorId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AuthorScientificWork_Works_ScientificWorksScientificWorkId",
-                        column: x => x.ScientificWorksScientificWorkId,
-                        principalTable: "Works",
-                        principalColumn: "ScientificWorkId",
+                        "FK_AuthorScientificWork_Works_ScientificWorksScientificWorkId",
+                        x => x.ScientificWorksScientificWorkId,
+                        "Works",
+                        "ScientificWorkId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Organizations",
-                columns: new[] { "OrganizationId", "Name" },
-                values: new object[] { 1, "Московский Политехнический Университет" });
+                "Organizations",
+                new[] {"OrganizationId", "Name"},
+                new object[] {1, "Московский Политехнический Университет"});
 
             migrationBuilder.InsertData(
-                table: "Positions",
-                columns: new[] { "PositionId", "Name" },
-                values: new object[] { 1, "доцент" });
+                "Positions",
+                new[] {"PositionId", "Name"},
+                new object[] {1, "доцент"});
 
             migrationBuilder.InsertData(
-                table: "Positions",
-                columns: new[] { "PositionId", "Name" },
-                values: new object[] { 2, "студент" });
+                "Positions",
+                new[] {"PositionId", "Name"},
+                new object[] {2, "студент"});
 
             migrationBuilder.InsertData(
-                table: "Faculties",
-                columns: new[] { "FacultyId", "Name", "OrganizationId" },
-                values: new object[] { 1, "Факультет Информационных Технологий", 1 });
+                "Faculties",
+                new[] {"FacultyId", "Name", "OrganizationId"},
+                new object[] {1, "Факультет Информационных Технологий", 1});
 
             migrationBuilder.InsertData(
-                table: "Departments",
-                columns: new[] { "DepartmentId", "FacultyId", "Name" },
-                values: new object[] { 1, 1, "Кафедра Информационной Безопасности" });
+                "Departments",
+                new[] {"DepartmentId", "FacultyId", "Name"},
+                new object[] {1, 1, "Кафедра Информационной Безопасности"});
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_DepartmentId",
-                table: "Authors",
-                column: "DepartmentId");
+                "IX_Authors_DepartmentId",
+                "Authors",
+                "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_FacultyId",
-                table: "Authors",
-                column: "FacultyId");
+                "IX_Authors_FacultyId",
+                "Authors",
+                "FacultyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_OrganizationId",
-                table: "Authors",
-                column: "OrganizationId");
+                "IX_Authors_OrganizationId",
+                "Authors",
+                "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_PositionId",
-                table: "Authors",
-                column: "PositionId");
+                "IX_Authors_PositionId",
+                "Authors",
+                "PositionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorScientificWork_ScientificWorksScientificWorkId",
-                table: "AuthorScientificWork",
-                column: "ScientificWorksScientificWorkId");
+                "IX_AuthorScientificWork_ScientificWorksScientificWorkId",
+                "AuthorScientificWork",
+                "ScientificWorksScientificWorkId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Departments_FacultyId",
-                table: "Departments",
-                column: "FacultyId");
+                "IX_Departments_FacultyId",
+                "Departments",
+                "FacultyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ELibFields_ScientificWorkId",
-                table: "ELibFields",
-                column: "ScientificWorkId",
+                "IX_ELibFields_ScientificWorkId",
+                "ELibFields",
+                "ScientificWorkId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Faculties_Name",
-                table: "Faculties",
-                column: "Name",
+                "IX_Faculties_Name",
+                "Faculties",
+                "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Faculties_OrganizationId",
-                table: "Faculties",
-                column: "OrganizationId");
+                "IX_Faculties_OrganizationId",
+                "Faculties",
+                "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JournalPublishes_ScientificWorkId",
-                table: "JournalPublishes",
-                column: "ScientificWorkId",
+                "IX_JournalPublishes_ScientificWorkId",
+                "JournalPublishes",
+                "ScientificWorkId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Organizations_Name",
-                table: "Organizations",
-                column: "Name",
+                "IX_Organizations_Name",
+                "Organizations",
+                "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Positions_Name",
-                table: "Positions",
-                column: "Name",
+                "IX_Positions_Name",
+                "Positions",
+                "Name",
                 unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AuthorScientificWork");
+                "AuthorScientificWork");
 
             migrationBuilder.DropTable(
-                name: "ELibFields");
+                "ELibFields");
 
             migrationBuilder.DropTable(
-                name: "JournalPublishes");
+                "JournalPublishes");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                "Authors");
 
             migrationBuilder.DropTable(
-                name: "Works");
+                "Works");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                "Departments");
 
             migrationBuilder.DropTable(
-                name: "Positions");
+                "Positions");
 
             migrationBuilder.DropTable(
-                name: "Faculties");
+                "Faculties");
 
             migrationBuilder.DropTable(
-                name: "Organizations");
+                "Organizations");
         }
     }
 }

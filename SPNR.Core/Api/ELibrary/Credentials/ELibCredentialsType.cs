@@ -2,6 +2,7 @@
 {
     public enum ELibCredentialsType
     {
-        LogPassPair, Cookies
+        LogPassPair,
+        Cookies
     }
 }

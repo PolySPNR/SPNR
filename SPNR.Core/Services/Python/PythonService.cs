@@ -1,10 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Text;
 using ER.Shared.Services.Logging;
 using Serilog;
 
@@ -14,7 +12,7 @@ namespace SPNR.Core.Services.Python
     public class PythonService
     {
         private readonly ILogger _logger;
-        
+
         public PythonService(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.GetLogger("Python");
@@ -22,15 +20,9 @@ namespace SPNR.Core.Services.Python
 
         public void Initialize()
         {
-            if (!File.Exists("./python/win/python.exe"))
-            {
-                Download();
-            }
+            if (!File.Exists("./python/win/python.exe")) Download();
 
-            if (!File.Exists("./python/win/Scripts/pip.exe"))
-            {
-                SetUp();
-            }
+            if (!File.Exists("./python/win/Scripts/pip.exe")) SetUp();
 
             using var pipList = new Process();
             pipList.StartInfo.FileName = "./python/win/Scripts/pip.exe";
@@ -40,10 +32,10 @@ namespace SPNR.Core.Services.Python
             pipList.Start();
 
             var output = pipList.StandardOutput.ReadToEnd();
-            
-            if(output.Contains("docx") && output.Contains("python-docx") && output.Contains("jsons"))
+
+            if (output.Contains("docx") && output.Contains("python-docx") && output.Contains("jsons"))
                 return;
-            
+
             GetDependencies();
         }
 
@@ -51,20 +43,20 @@ namespace SPNR.Core.Services.Python
         {
             _logger.Information("Downloading Python distribution");
             string link;
-            
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 link = "https://www.python.org/ftp/python/3.7.9/python-3.7.9-embed-win32.zip";
             else
                 return;
 
             Directory.CreateDirectory("./python/win");
-            
+
             var wc = new WebClient();
             wc.DownloadFile(link, "./python.zip");
-            
+
             _logger.Information("Extracting Python distribution");
             ZipFile.ExtractToDirectory("./python.zip", "./python/win");
-            
+
             File.Delete("./python.zip");
         }
 
@@ -73,13 +65,13 @@ namespace SPNR.Core.Services.Python
             _logger.Information("Setting up");
             var pth = "./python/win/python37._pth";
             File.WriteAllText(pth, File.ReadAllText(pth).Replace("#import site", "import site"));
-            
+
             _logger.Information("Setting up pip");
-            
+
             _logger.Information("Downloading get-pip.py");
             var wc = new WebClient();
             wc.DownloadFile("https://bootstrap.pypa.io/get-pip.py", "./python/win/get-pip.py");
-            
+
             _logger.Information("Installing pip");
             Process.Start("./python/win/python.exe", "./python/win/get-pip.py")?.WaitForExit();
         }

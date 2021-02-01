@@ -10,7 +10,7 @@ namespace SPNR.Core.Services.Selection.Drivers.ELibrary
     {
         public async Task<List<ScientificWork>> Search(SearchInfo info)
         {
-            return new List<ScientificWork>();
+            return new();
         }
     }
 }

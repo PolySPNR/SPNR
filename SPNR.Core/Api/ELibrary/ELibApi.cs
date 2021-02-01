@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,19 +14,17 @@ namespace SPNR.Core.Api.ELibrary
 {
     public class ELibApi
     {
-        public int RequestCooldown { get; set; } = 500;
-        
-        public readonly CookieContainer CookieContainer = new();
-        
         private readonly Uri _baseAddress = new("https://www.elibrary.ru");
-        private readonly HtmlParser _parser = new();
         private readonly HttpClient _httpClient;
+        private readonly HtmlParser _parser = new();
+
+        public readonly CookieContainer CookieContainer = new();
 
         private DateTime _lastRequestTime;
-        
+
         public ELibApi()
         {
-            var httpClientHandler = new HttpClientHandler()
+            var httpClientHandler = new HttpClientHandler
             {
                 CookieContainer = CookieContainer
             };
@@ -36,29 +33,32 @@ namespace SPNR.Core.Api.ELibrary
             {
                 BaseAddress = _baseAddress
             };
-            
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36");
+
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36");
         }
+
+        public int RequestCooldown { get; set; } = 500;
 
         private bool CheckCooldown()
         {
             var msFromLastRequest = (DateTime.Now - _lastRequestTime).Milliseconds;
 
-            if (msFromLastRequest < RequestCooldown) 
+            if (msFromLastRequest < RequestCooldown)
                 return false;
-            
+
             _lastRequestTime = DateTime.Now;
             return true;
         }
-        
+
         public async Task<ApiAnswer> Authorize(ELibCredentialsType credentialsType, string cred1, string cred2)
         {
             if (!CheckCooldown())
-                return new ApiAnswer()
+                return new ApiAnswer
                 {
                     Exception = new Exception("You can't do request yet")
                 };
-            
+
             if (credentialsType == ELibCredentialsType.Cookies)
             {
                 CookieContainer.Add(_baseAddress, new CookieCollection
@@ -66,26 +66,24 @@ namespace SPNR.Core.Api.ELibrary
                     new Cookie("SUserID", cred1),
                     new Cookie("SCookieID", cred2)
                 });
-                
+
                 // TODO check if cookies are still valid
-                
+
                 return new ApiAnswer();
             }
-            
+
             await _httpClient.GetAsync("/");
-            
+
             var authContent = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 {"login", cred1},
                 {"password", cred2}
             });
-            
+
             await _httpClient.PostAsync("/start_session.asp", authContent);
-            
+
             foreach (Cookie cookie in CookieContainer.GetCookies(new Uri("https://www.elibrary.ru")))
-            {
                 Console.WriteLine(cookie.ToString());
-            }
 
             return new ApiAnswer();
         }
@@ -130,27 +128,20 @@ namespace SPNR.Core.Api.ELibrary
                 {"save_queryboxid", "0"}
             };
 
-            if (searchInfo.DateFrom != default && searchInfo.DateTo != default && searchInfo.DateTo.Date != DateTime.Now.Date)
-            {
+            if (searchInfo.DateFrom != default && searchInfo.DateTo != default &&
+                searchInfo.DateTo.Date != DateTime.Now.Date)
                 sData["issues"] = $"d{Math.Round((searchInfo.DateTo - searchInfo.DateFrom).TotalDays)}";
-            }
-            
-            if (searchInfo.DateFrom != default)
-            {
-                sData["begin_year"] = searchInfo.DateFrom.Year.ToString();
-            }
 
-            if (searchInfo.DateTo != default)
-            {
-                sData["end_year"] = searchInfo.DateTo.Year.ToString();
-            }
-            
+            if (searchInfo.DateFrom != default) sData["begin_year"] = searchInfo.DateFrom.Year.ToString();
+
+            if (searchInfo.DateTo != default) sData["end_year"] = searchInfo.DateTo.Year.ToString();
+
             var content = new FormUrlEncodedContent(sData);
             var response = await _httpClient.PostAsync($"/query_results.asp?pagenum={pageId}", content);
             answer.StatusCode = response.StatusCode;
-            
+
             var doc = _parser.ParseDocument(await response.Content.ReadAsStringAsync());
-            
+
             Console.WriteLine(doc.Body.InnerHtml);
 
             var table = doc.QuerySelectorAll("#restab > tbody")[0].Children;
@@ -161,10 +152,10 @@ namespace SPNR.Core.Api.ELibrary
                     continue;
 
                 var id = tableChild.Id.Remove(0, 1);
-                
+
                 answer.Data.Add(int.Parse(id));
             }
-            
+
             return answer;
         }
 
@@ -181,9 +172,9 @@ namespace SPNR.Core.Api.ELibrary
             var publishInfo =
                 doc.QuerySelector(
                     "body > table > tbody > tr > td > table:nth-child(1) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(4) > td:nth-child(1)");
-            
+
             answer.Data.WorkName = publishInfo.QuerySelector(
-                "table:nth-child(2) > tbody > tr > td:nth-child(2) > span > b > p")
+                    "table:nth-child(2) > tbody > tr > td:nth-child(2) > span > b > p")
                 .InnerHtml;
 
             if (publishInfo.QuerySelector(
@@ -192,12 +183,18 @@ namespace SPNR.Core.Api.ELibrary
             )
             {
                 answer.Data.PublishType = PublishType.Journal;
-                answer.Data.JournalPublish = new JournalPublish()
+                answer.Data.JournalPublish = new JournalPublish
                 {
-                    Name = publishInfo.QuerySelector("div > table:nth-child(6) > tbody > tr:nth-child(2) > td:nth-child(2) > a").InnerHtml,
-                    Number = publishInfo.QuerySelector("div > table:nth-child(4) > tbody > tr:nth-child(3) > td > a").InnerHtml,
-                    Year = int.Parse(publishInfo.QuerySelector("div > table:nth-child(4) > tbody > tr:nth-child(3) > td > font").InnerHtml),
-                    ISSN = publishInfo.QuerySelector("div > table:nth-child(6) > tbody > tr:nth-child(2) > td:nth-child(2) > font").InnerHtml
+                    Name = publishInfo
+                        .QuerySelector("div > table:nth-child(6) > tbody > tr:nth-child(2) > td:nth-child(2) > a")
+                        .InnerHtml,
+                    Number = publishInfo.QuerySelector("div > table:nth-child(4) > tbody > tr:nth-child(3) > td > a")
+                        .InnerHtml,
+                    Year = int.Parse(publishInfo
+                        .QuerySelector("div > table:nth-child(4) > tbody > tr:nth-child(3) > td > font").InnerHtml),
+                    ISSN = publishInfo
+                        .QuerySelector("div > table:nth-child(6) > tbody > tr:nth-child(2) > td:nth-child(2) > font")
+                        .InnerHtml
                 };
 
                 var pages =
@@ -219,7 +216,7 @@ namespace SPNR.Core.Api.ELibrary
                         break;
                 }
             }
-            
+
             return answer;
         }
     }

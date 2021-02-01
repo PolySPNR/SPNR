@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SPNR.Core.Services.Data;
 using SPNR.Core.Services.Data.Contexts;
 using SPNR.Core.Services.Python;
@@ -15,7 +14,7 @@ namespace SPNR.Core.Services
             collection.AddSingleton<DataService>();
             collection.AddSingleton<SelectionService>();
             collection.AddSingleton<PythonService>();
-            
+
             return collection;
         }
     }

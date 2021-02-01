@@ -3,7 +3,7 @@
     public class ELibInfo
     {
         public int ELibInfoId { get; set; }
-        
+
         public bool RINC { get; set; }
         public bool RINCCore { get; set; }
         public bool Scopus { get; set; }

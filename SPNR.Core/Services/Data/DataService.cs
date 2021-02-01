@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Buffers.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using ER.Shared.Services.Logging;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using SPNR.Core.Models;
 using SPNR.Core.Models.AuthorInfo;
@@ -23,8 +19,8 @@ namespace SPNR.Core.Services.Data
     public class DataService
     {
         private readonly ScWorkContext _dbContext;
-        private readonly PythonService _pythonService;
         private readonly ILogger _logger;
+        private readonly PythonService _pythonService;
 
         public DataService(ILoggerFactory loggerFactory, ScWorkContext dbContext, PythonService pythonService)
         {
@@ -69,9 +65,9 @@ namespace SPNR.Core.Services.Data
                     "scripts",
                     "import.py")),
                 file);
-            
+
             var list = JsonConvert.DeserializeObject<List<AuthorImport>>(json);
-            
+
             foreach (var author in list)
             {
                 var org = _dbContext.Organizations.FirstOrDefault(o => o.Name == author.Organization) ??
@@ -103,7 +99,6 @@ namespace SPNR.Core.Services.Data
                 var nAuthor = _dbContext.Authors.FirstOrDefault(a => a.Name == author.Name);
 
                 if (nAuthor == null)
-                {
                     await _dbContext.AddAsync(new Author
                     {
                         Name = author.Name,
@@ -112,8 +107,7 @@ namespace SPNR.Core.Services.Data
                         Department = dep,
                         Position = pos
                     });
-                }
-                
+
                 await _dbContext.SaveChangesAsync();
             }
         }

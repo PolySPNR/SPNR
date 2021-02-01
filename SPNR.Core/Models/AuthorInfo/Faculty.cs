@@ -8,12 +8,11 @@ namespace SPNR.Core.Models.AuthorInfo
     public class Faculty
     {
         public int FacultyId { get; set; }
-        
-        [Required]
-        public string Name { get; set; }
+
+        [Required] public string Name { get; set; }
 
         public List<Department> Departments { get; } = new();
-        
+
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
     }

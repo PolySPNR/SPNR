@@ -10,7 +10,7 @@ namespace ER.Shared.Services.Logging
         {
             serviceCollection.AddSingleton<ILoggerFactory, LoggerFactory>();
         }
-        
+
         public static void DumpException(this ILogger logger, Exception exception)
         {
             static string BuildStringForException(Exception exc)

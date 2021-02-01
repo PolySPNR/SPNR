@@ -2,6 +2,7 @@
 {
     public enum PublishType
     {
-        Journal, DepManuscript
+        Journal,
+        DepManuscript
     }
 }

@@ -10,7 +10,7 @@ namespace SPNR.Core.Misc
     /// <typeparam name="T">Type of environment variable. Should be a basic type</typeparam>
     public class EnvVar<T>
     {
-        internal static readonly Dictionary<string, EnvVar<T>> Vars = new Dictionary<string, EnvVar<T>>();
+        internal static readonly Dictionary<string, EnvVar<T>> Vars = new();
         private readonly TypeConverter _converter;
 
         private readonly T _defValue;
@@ -71,7 +71,7 @@ namespace SPNR.Core.Misc
         {
             if (EnvVar<T>.Vars.ContainsKey(name))
                 return EnvVar<T>.Vars[name];
-            
+
             var envVar = new EnvVar<T>(name, defaultValue);
             EnvVar<T>.Vars.Add(name, envVar);
 
