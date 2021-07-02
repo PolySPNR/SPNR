@@ -16,11 +16,11 @@ namespace SPNR.CLI
     {
         private readonly DataService _dataService;
         private readonly ILogger _logger;
-        private readonly PythonService _pythonService;
+        private readonly IPythonService _pythonService;
         private readonly SelectionService _selectionService;
 
         public EntryPoint(ILoggerFactory loggerFactory, DataService dataService, SelectionService selectionService,
-            PythonService pythonService)
+            IPythonService pythonService)
         {
             _logger = loggerFactory.GetLogger("CLI");
             _dataService = dataService;

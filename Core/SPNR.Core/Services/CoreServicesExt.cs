@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using SPNR.Core.Services.Data;
 using SPNR.Core.Services.Data.Contexts;
 using SPNR.Core.Services.Python;
@@ -13,7 +14,11 @@ namespace SPNR.Core.Services
             collection.AddDbContext<ScWorkContext>();
             collection.AddSingleton<DataService>();
             collection.AddSingleton<SelectionService>();
-            collection.AddSingleton<PythonService>();
+            
+            if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+                collection.AddSingleton<IPythonService, PythonWindowsService>();
+            else
+                collection.AddSingleton<IPythonService, PythonUnixService>(); // TODO Change
 
             return collection;
         }

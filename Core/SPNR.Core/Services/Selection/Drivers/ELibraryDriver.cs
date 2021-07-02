@@ -13,7 +13,8 @@ using SPNR.Core.Models.Works;
 
 namespace SPNR.Core.Services.Selection.Drivers
 {
-    [SelectionDriver("elib")]
+    // Disabled driver
+    //[SelectionDriver("elib")]
     public class ELibraryDriver : ISelectionDriver
     {
         private readonly ELibApi _api = new();

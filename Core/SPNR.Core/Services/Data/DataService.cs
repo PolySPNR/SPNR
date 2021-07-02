@@ -20,9 +20,9 @@ namespace SPNR.Core.Services.Data
     {
         private readonly ScWorkContext _dbContext;
         private readonly ILogger _logger;
-        private readonly PythonService _pythonService;
+        private readonly IPythonService _pythonService;
 
-        public DataService(ILoggerFactory loggerFactory, ScWorkContext dbContext, PythonService pythonService)
+        public DataService(ILoggerFactory loggerFactory, ScWorkContext dbContext, IPythonService pythonService)
         {
             _logger = loggerFactory.GetLogger("Data");
             _dbContext = dbContext;
