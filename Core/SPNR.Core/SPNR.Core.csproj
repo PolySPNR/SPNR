@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ER.Shared.Services.Logging\ER.Shared.Services.Logging.csproj" />
+      <ProjectReference Include="..\Scopus.Api.Client\Scopus.Api.Client.csproj" />
     </ItemGroup>
 
     <ItemGroup>
