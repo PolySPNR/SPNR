@@ -35,7 +35,7 @@ namespace Tests
         [Fact]
         public void MigrationsOk()
         {
-
+            Assert.NotEmpty(_context.Database.GetMigrations());
         }
 
         /// <summary>
