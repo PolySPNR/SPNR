@@ -44,7 +44,7 @@ namespace Tests
         [Fact]
         public void CanConnect()
         {
-
+            Assert.True(_context.Database.CanConnect());
         }
         
         /// <summary>
