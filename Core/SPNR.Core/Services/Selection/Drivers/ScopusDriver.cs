@@ -30,7 +30,6 @@ namespace SPNR.Core.Services.Selection.Drivers
         {
             var apiKey = new EnvVar<string>("SPNR_SCOPUS_API_KEY", null);
             
-            
             // if (apiKey.Value == null)
             // {
             //     _logger.Warning("API Key is not set. Driver won't be used");
