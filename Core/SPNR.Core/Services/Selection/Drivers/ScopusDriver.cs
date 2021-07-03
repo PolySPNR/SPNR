@@ -39,16 +39,14 @@ namespace SPNR.Core.Services.Selection.Drivers
 
             var api = new ScopusSearchClient("https://api.elsevier.com/", "8d51321ac59b87444e3c31d5487e8542");
             
-            var scopusSearchResult = await api.GetAsync<SearchResults<Scopus.Api.Client.Models.Search.Scopus>>("content/search/scopus", "query=AFFILCITY(KARABUK)AUTHOR-NAME(TURKER I)");
+            var scopusSearchResult = await api.GetAsync<SearchResults<Scopus.Api.Client.Models.Search.Scopus>>("content/search/scopus", "query=AUTHOR-NAME(budylina e)");
 
             foreach (var scopus in scopusSearchResult.Data.Entry)
             {
-                _logger.Information($"{scopus.PrismPublicationName} | {scopus.Affiliation}");
+                _logger.Information($"{scopus.PrismPublicationName}");
             }
             
             File.WriteAllText("./result.json", JsonConvert.SerializeObject(scopusSearchResult, Formatting.Indented));
-            
-            // TODO register API
         }
 
         public Task<List<ScientificWork>> Search(SearchInfo info)

@@ -11,6 +11,8 @@ namespace SPNR.Core.Models.Works
     public class ScientificWork
     {
         public int ScientificWorkId { get; set; }
+        
+        [JsonIgnore]
         public List<Author> Authors { get; } = new();
         public string WorkName { get; set; }
         public string DigitalObjectIdentifier { get; set; }

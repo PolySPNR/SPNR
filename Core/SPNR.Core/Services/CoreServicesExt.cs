@@ -11,14 +11,14 @@ namespace SPNR.Core.Services
     {
         public static IServiceCollection AddCoreServices(this IServiceCollection collection)
         {
-            collection.AddDbContext<ScWorkContext>();
+            collection.AddSingleton<ScWorkContext>();
             collection.AddSingleton<DataService>();
             collection.AddSingleton<SelectionService>();
             
             if(Environment.OSVersion.Platform == PlatformID.Win32NT)
                 collection.AddSingleton<IPythonService, PythonWindowsService>();
             else
-                collection.AddSingleton<IPythonService, PythonUnixService>(); // TODO Change
+                collection.AddSingleton<IPythonService, PythonUnixService>();
 
             return collection;
         }

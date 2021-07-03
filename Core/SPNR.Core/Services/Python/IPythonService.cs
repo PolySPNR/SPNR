@@ -1,4 +1,8 @@
-﻿namespace SPNR.Core.Services.Python
+﻿/*
+ * Maintainer: Valeria
+ */
+
+namespace SPNR.Core.Services.Python
 {
     public interface IPythonService
     {
