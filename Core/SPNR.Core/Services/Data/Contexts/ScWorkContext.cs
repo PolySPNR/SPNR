@@ -11,6 +11,11 @@ namespace SPNR.Core.Services.Data.Contexts
 {
     public class ScWorkContext : DbContext
     {
+        public ScWorkContext(DbContextOptions<ScWorkContext> options) : base(options)
+        {
+            
+        }
+
         public DbSet<ScientificWork> Works { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<ELibInfo> ELibFields { get; set; }
