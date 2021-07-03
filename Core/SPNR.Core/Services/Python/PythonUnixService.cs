@@ -1,4 +1,8 @@
-﻿using System.Diagnostics;
+﻿/*
+ * Maintainer: Valeria
+ */
+
+using System.Diagnostics;
 using ER.Shared.Services.Logging;
 using Serilog;
 

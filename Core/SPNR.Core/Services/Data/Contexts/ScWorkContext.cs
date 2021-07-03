@@ -72,7 +72,8 @@ namespace SPNR.Core.Services.Data.Contexts
                 .HasData(new Organization
                 {
                     OrganizationId = 1,
-                    Name = "Московский Политехнический Университет"
+                    Name = "Московский Политехнический Университет",
+                    IntName = "Moscow Polytechnic University"
                 });
 
             modelBuilder.Entity<Position>()

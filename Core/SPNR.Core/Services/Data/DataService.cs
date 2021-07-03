@@ -41,6 +41,39 @@ namespace SPNR.Core.Services.Data
             return await _dbContext.Organizations.ToListAsync();
         }
 
+        public async Task<List<Faculty>> GetFaculties(int organizationId)
+        {
+            return await _dbContext.Faculties.Where(f => f.OrganizationId == organizationId).ToListAsync();
+        }
+
+        public async Task<List<Department>> GetDepartments(int facultyId)
+        {
+            return await _dbContext.Departments.Where(d => d.FacultyId == facultyId).ToListAsync();
+        }
+
+        public async Task<List<Author>> GetAuthors(int departmentId)
+        {
+            return await _dbContext.Departments
+                .Where(d => d.DepartmentId == departmentId)
+                .SelectMany(d => d.Authors).ToListAsync();
+        }
+
+        public async Task<bool> UpdateAuthor(Author author)
+        {
+            var exist = await _dbContext.Authors.AnyAsync(a => a.AuthorId == author.AuthorId);
+
+            if (!exist)
+            {
+                _dbContext.Authors.Add(author);
+                await _dbContext.SaveChangesAsync();
+            }
+            
+            
+            
+
+            return true;
+        }
+        
         public async void AddWork(ScientificWork scientificWork)
         {
             await _dbContext.AddAsync(scientificWork);
